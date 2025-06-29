@@ -1,1 +1,4 @@
-button { cursor: pointer; } button:hover { box-shadow: 0 0 5px rgba(0,0,0,0.3); background-color: #f0f0f0; }
+body { font-family: sans-serif; padding: 2em; background: #f8f8ff; }
+button { cursor: pointer; padding: 8px 12px; margin: 4px; }
+button:hover { box-shadow: 0 0 5px rgba(0,0,0,0.3); background-color: #e0f0ff; }
+input { padding: 6px; margin: 4px; }

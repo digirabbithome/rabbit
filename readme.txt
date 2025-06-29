@@ -1,1 +1,1 @@
-這是 Rabbithome v4 完整打卡系統，支援綽號、登入、打卡紀錄等功能。
+Rabbithome v4 正式版：含 Firebase 登入、綽號、打卡記錄與 Firestore 整合。

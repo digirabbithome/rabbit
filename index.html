@@ -1,1 +1,30 @@
-<!DOCTYPE html><html><head><title>Rabbithome v4</title></head><body><h1>🎉 歡迎進入 Rabbithome v4 真綽號系統！</h1><p>登入後顯示綽號與打卡狀態</p></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rabbithome v4</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="firebase-config.js"></script>
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>🎉 歡迎進入 Rabbithome v4 真綽號系統！</h1>
+    <div id="login-section">
+      <input type="email" id="email" placeholder="Email">
+      <input type="password" id="password" placeholder="密碼">
+      <button id="loginBtn">登入</button>
+    </div>
+    <div id="nickname-section" style="display:none;">
+      <input type="text" id="nickname" placeholder="請輸入綽號">
+      <button id="saveNicknameBtn">儲存綽號</button>
+    </div>
+    <div id="dashboard" style="display:none;">
+      <p id="welcomeMsg"></p>
+      <button id="markDoneBtn">✔️ 我已完成今日工作</button>
+      <p id="doneMsg"></p>
+      <h3>今日完成情況：</h3>
+      <ul id="logList"></ul>
+    </div>
+  </div>
+</body>
+</html>
