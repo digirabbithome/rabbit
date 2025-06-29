@@ -24,27 +24,44 @@ loginBtn.onclick = async () => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
   } catch (e) {
-    alert("登入失敗：" + e.message);
+    alert("❌ 登入失敗：" + e.message);
+    console.error(e);
   }
 };
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
+    console.log("✅ 登入成功：", user.email);
     loginSection.style.display = "none";
+
     const uid = user.uid;
     const nicknameRef = doc(db, "nicknames", uid);
-    const nicknameSnap = await getDoc(nicknameRef);
-    if (nicknameSnap.exists()) {
-      showDashboard(nicknameSnap.data().nickname);
-    } else {
-      nicknameSection.style.display = "block";
-      document.getElementById("saveNicknameBtn").onclick = async () => {
-        const nickname = document.getElementById("nickname").value;
-        await setDoc(nicknameRef, { nickname });
-        nicknameSection.style.display = "none";
-        showDashboard(nickname);
-      };
+    try {
+      const nicknameSnap = await getDoc(nicknameRef);
+      if (nicknameSnap.exists()) {
+        console.log("✅ 綽號已存在：", nicknameSnap.data().nickname);
+        showDashboard(nicknameSnap.data().nickname);
+      } else {
+        console.log("⚠️ 尚未設定綽號");
+        nicknameSection.style.display = "block";
+        document.getElementById("saveNicknameBtn").onclick = async () => {
+          const nickname = document.getElementById("nickname").value.trim();
+          if (!nickname) {
+            alert("請輸入綽號！");
+            return;
+          }
+          await setDoc(nicknameRef, { nickname });
+          nicknameSection.style.display = "none";
+          showDashboard(nickname);
+        };
+      }
+    } catch (e) {
+      alert("讀取綽號錯誤：" + e.message);
+      console.error(e);
     }
+  } else {
+    console.log("🟡 尚未登入，顯示登入畫面");
+    loginSection.style.display = "block";
   }
 });
 
