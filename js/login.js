@@ -1,1 +1,1 @@
-// Firebase 登入邏輯（略）
+// Firebase 登入功能邏輯（略）
