@@ -1,25 +1,77 @@
-// JS 邏輯：Firebase 初始化、登入、登出、打卡、綽號等// 取得今天日期（台灣格式）
-const today = new Date();
-const formattedDate = today.toLocaleDateString("zh-TW");
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, serverTimestamp, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
-// 修改主標題
-document.getElementById("mainTitle").textContent = `🎉 數位小兔 ${formattedDate} 工作流程！`;
+const firebaseConfig = {
+  apiKey: "AIzaSyANuDJyJuQbxnXq-FTyaTAI9mSc6zpmuWs",
+  authDomain: "rabbithome-auth.firebaseapp.com",
+  projectId: "rabbithome-auth",
+};
 
-// 修改按鈕文字
-const markButton = document.getElementById("markDone");
-markButton.textContent = "🕤 9:30 阿寶交代";
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-// 綁定打卡事件
-markButton.addEventListener("click", async () => {
-  const now = new Date();
-  const timeString = now.toTimeString().split(" ")[0]; // 取得 HH:MM:SS
+const tasks = [
+  "9:30 阿寶交代", "9:30 點錢", "9:30 QA", "11:30 QA", "1:30 QA",
+  "3:00 QA", "5:00 QA", "6:30 QA", "3:00 叫貨", "6:30 叫貨",
+  "每日阿寶交代", "每日花花LINE", "每日追蹤開年"
+];
 
-  // 儲存到 Firestore
-  const docRef = doc(db, "worklog", formattedDate);
-  await setDoc(docRef, {
-    [currentNickname]: timeString
-  }, { merge: true });
+function formatTime(date) {
+  const h = String(date.getHours()).padStart(2, '0');
+  const m = String(date.getMinutes()).padStart(2, '0');
+  return `${h}:${m}`;
+}
 
-  // 顯示完成文字（不換行）
-  document.getElementById("completedStatus").textContent = `✔️ ${currentNickname} 在 ${timeString} 完成`;
+function renderDashboard(nickname, uid) {
+  const container = document.getElementById("app");
+  container.innerHTML = `<h2>🎉 數位小兔 ${new Date().toLocaleDateString()} 工作流程！</h2>
+  <p>哈囉，${nickname}！</p>
+  <div id="task-list"></div>
+  <button id="logout">登出</button>`;
+  document.getElementById("logout").onclick = () => signOut(auth);
+
+  const today = new Date().toISOString().split("T")[0];
+  const dayDoc = doc(db, "days", today);
+
+  onSnapshot(dayDoc, (snapshot) => {
+    const data = snapshot.data() || {};
+    const taskList = document.getElementById("task-list");
+    taskList.innerHTML = "";
+    tasks.forEach((task) => {
+      const people = data[task] || {};
+      const results = Object.entries(people)
+        .map(([name, ts]) => `✔️ ${name} 在 ${formatTime(ts.toDate())}`)
+        .join("  ");
+      const line = document.createElement("p");
+      line.textContent = `🕤 ${task} ${results}`;
+      taskList.appendChild(line);
+    });
+  });
+
+  tasks.forEach((task) => {
+    const btn = document.createElement("button");
+    btn.textContent = `🕤 ${task}`;
+    btn.onclick = async () => {
+      const today = new Date().toISOString().split("T")[0];
+      const ref = doc(db, "days", today);
+      const snap = await getDoc(ref);
+      const prev = snap.exists() ? snap.data() : {};
+      const entry = prev[task] || {};
+      entry[nickname] = serverTimestamp();
+      await updateDoc(ref, { [task]: entry }).catch(() =>
+        setDoc(ref, { [task]: entry })
+      );
+    };
+    container.appendChild(btn);
+  });
+}
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return (window.location.href = "index.html");
+  const profileRef = doc(db, "users", user.uid);
+  const profileSnap = await getDoc(profileRef);
+  const nickname = profileSnap.exists() ? profileSnap.data().nickname : user.email;
+  renderDashboard(nickname, user.uid);
 });
