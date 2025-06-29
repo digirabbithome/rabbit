@@ -18,28 +18,10 @@
     firebase.initializeApp(firebaseConfig);
   </script>
   <style>
-    body {{
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 100px;
-      background: #f0f4ff;
-    }}
-    input {{
-      padding: 10px;
-      margin: 10px;
-      width: 200px;
-    }}
-    button {{
-      padding: 10px 20px;
-      background-color: #2e7eff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }}
-    #error {{
-      color: red;
-      margin-top: 10px;
-    }}
+    body { font-family: Arial, sans-serif; text-align: center; padding-top: 100px; background: #f0f4ff; }
+    input { padding: 10px; margin: 10px; width: 200px; }
+    button { padding: 10px 20px; background-color: #2e7eff; color: white; border: none; border-radius: 5px; }
+    #error { color: red; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -56,10 +38,10 @@
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
       firebase.auth().signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
+        .then(() => {
           window.location.href = "dashboard.html";
         })
-        .catch((error) => {
+        .catch(() => {
           document.getElementById("error").textContent = "帳號或密碼錯誤";
         });
     });
