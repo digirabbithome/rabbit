@@ -17,6 +17,7 @@ const welcomeMsg = document.getElementById("welcomeMsg");
 const markDoneBtn = document.getElementById("markDoneBtn");
 const doneMsg = document.getElementById("doneMsg");
 const logList = document.getElementById("logList");
+const sidebar = document.getElementById("sidebar");
 
 loginBtn.onclick = async () => {
   const email = emailInput.value;
@@ -31,7 +32,6 @@ loginBtn.onclick = async () => {
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    console.log("✅ 登入成功：", user.email);
     loginSection.style.display = "none";
 
     const uid = user.uid;
@@ -39,10 +39,8 @@ onAuthStateChanged(auth, async (user) => {
     try {
       const nicknameSnap = await getDoc(nicknameRef);
       if (nicknameSnap.exists()) {
-        console.log("✅ 綽號已存在：", nicknameSnap.data().nickname);
         showDashboard(nicknameSnap.data().nickname);
       } else {
-        console.log("⚠️ 尚未設定綽號");
         nicknameSection.style.display = "block";
         document.getElementById("saveNicknameBtn").onclick = async () => {
           const nickname = document.getElementById("nickname").value.trim();
@@ -60,13 +58,13 @@ onAuthStateChanged(auth, async (user) => {
       console.error(e);
     }
   } else {
-    console.log("🟡 尚未登入，顯示登入畫面");
     loginSection.style.display = "block";
   }
 });
 
 async function showDashboard(nickname) {
   dashboard.style.display = "block";
+  sidebar.style.display = "block";
   welcomeMsg.innerText = `哈囉 ${nickname}！`;
 
   const today = new Date().toISOString().split("T")[0];
@@ -88,13 +86,26 @@ async function showDashboard(nickname) {
     setTimeout(() => location.reload(), 1000);
   };
 
+  // 顯示「今日完成清單」
   const querySnap = await getDocs(collection(db, "logs"));
   logList.innerHTML = "";
+  const todayLogs = [];
   querySnap.forEach((doc) => {
     const data = doc.data();
-    const logTime = data.time?.seconds ? new Date(data.time.seconds * 1000).toLocaleTimeString() : "";
+    const dateKey = doc.id.split("_")[0];
+    if (dateKey === today) {
+      todayLogs.push({
+        nickname: data.nickname || data.email,
+        time: data.time?.seconds || 0
+      });
+    }
+  });
+
+  todayLogs.sort((a, b) => a.time - b.time);
+  todayLogs.forEach(log => {
     const li = document.createElement("li");
-    li.innerText = `✔️ ${data.nickname || data.email} 在 ${logTime} 完成`;
+    const timeStr = new Date(log.time * 1000).toLocaleTimeString();
+    li.innerText = `✔️ ${log.nickname} 在 ${timeStr} 完成`;
     logList.appendChild(li);
   });
 }
