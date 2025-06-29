@@ -1,71 +1,25 @@
+
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html>
 <head>
   <meta charset="UTF-8" />
-  <title>Rabbithome 工作區</title>
-  <style>
-    body {
-      margin: 0;
-      display: flex;
-      font-family: Arial, sans-serif;
-    }
-    #sidebar {
-      width: 200px;
-      background-color: #f3f3f3;
-      padding: 20px;
-      height: 100vh;
-      box-sizing: border-box;
-      border-right: 1px solid #ccc;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    #sidebar h2 {
-      font-size: 18px;
-      margin-bottom: 20px;
-    }
-    #sidebar button {
-      width: 100%;
-      margin-top: 10px;
-      padding: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    #main {
-      flex: 1;
-      padding: 20px;
-    }
-    #actionRow {
-      margin-top: 20px;
-    }
-    #markDone {
-      font-size: 16px;
-      padding: 8px 12px;
-      margin-right: 10px;
-    }
-    #completedStatus {
-      display: inline;
-      font-weight: bold;
-      color: green;
-    }
-  </style>
+  <title>Rabbithome Dashboard</title>
+  <script type="module" src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
+  <script type="module" src="./dashboard.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyANuDJyJuQbxnXq-FTyaTAI9mSc6zpmuWs",
+      authDomain: "rabbithome-auth.firebaseapp.com",
+      projectId: "rabbithome-auth",
+      storageBucket: "rabbithome-auth.appspot.com",
+      messagingSenderId: "50928677930",
+      appId: "1:50928677930:web:e8eff13c8028b888537f53"
+    };
+  </script>
 </head>
 <body>
-  <div id="sidebar">
-    <div>
-      <h2>📋 Rabbithome</h2>
-      <button disabled>📝 今日工作</button>
-    </div>
-    <button id="logout">登出</button>
-  </div>
-  <div id="main">
-    <h1 id="mainTitle">🎉 數位小兔 工作流程！</h1>
-    <div id="nickname">哈囉，小兔！</div>
-    <div id="actionRow">
-      <button id="markDone">🕤 9:30 阿寶交代</button>
-      <span id="completedStatus">尚未完成今日工作</span>
-    </div>
-  </div>
-  <script type="module" src="js/dashboard.js"></script>
+  載入中...
 </body>
 </html>
