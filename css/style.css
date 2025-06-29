@@ -1,1 +1,13 @@
-/* CSS 樣式：左側工具列 + 右側內容區域 */
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f8f8;
+  margin: 0;
+  padding: 0;
+}
+#login-container, #app {
+  padding: 2em;
+}
+button {
+  cursor: pointer;
+}
