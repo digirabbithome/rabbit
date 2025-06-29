@@ -1,68 +1,52 @@
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const app = firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const auth = firebase.auth();
+const firebaseConfig = {
+  apiKey: "AIzaSyANuDJyJuQbxnXq-FTyaTAI9mSc6zpmuWs",
+  authDomain: "rabbithome-auth.firebaseapp.com",
+  projectId: "rabbithome-auth"
+};
 
-  const formatTime = (timestamp) => {
-    const date = timestamp.toDate();
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    return `${hours}:${minutes}`;
-  };
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-  auth.onAuthStateChanged(async (user) => {
-    if (user) {
-      const uid = user.uid;
-      const userDoc = await db.collection("nicknames").doc(uid).get();
-      const nickname = userDoc.data()?.nickname || "未知使用者";
+const appDiv = document.getElementById("app");
 
-      document.body.innerHTML = `
-        <div style="display: flex;">
-          <div style="width: 200px; background: #f0f0f0; padding: 1em;">
-            <div>📋 今日工作</div>
-            <div><button onclick="logout()">登出</button></div>
-          </div>
-          <div style="flex-grow: 1; padding: 1em;">
-            <h2>🎉 數位小兔 ${new Date().toISOString().split('T')[0]} 工作流程！</h2>
-            <p>哈囉，${nickname}！</p>
-            <div id="work-area">🕤 9:30 阿寶交代</div>
-          </div>
-        </div>
-      `;
+auth.onAuthStateChanged(async (user) => {
+  if (!user) {
+    window.location.href = "index.html";
+    return;
+  }
 
-      const workArea = document.getElementById("work-area");
+  const uid = user.uid;
+  const email = user.email;
 
-      const allDocs = await db.collection("nicknames").get();
-      const results = [];
+  const nicknameDoc = await db.collection("nicknames").doc(uid).get();
+  const nickname = nicknameDoc.exists ? nicknameDoc.data().nickname : email;
 
-      allDocs.forEach(doc => {
-        const data = doc.data();
-        if (data.completed) {
-          results.push(`✔️ ${data.nickname} 在 ${formatTime(data.completed)} 完成`);
-        }
-      });
+  const todayKey = new Date().toISOString().slice(0, 10);
+  const docRef = db.collection("worklogs").doc(todayKey);
 
-      if (results.length) {
-        workArea.innerHTML += "    " + results.join("、");
-      }
+  const docSnap = await docRef.get();
+  const data = docSnap.exists ? docSnap.data() : {};
 
-      const button = document.createElement("button");
-      button.textContent = "✔️ 完成今日工作";
-      button.onclick = async () => {
-        await db.collection("nicknames").doc(uid).update({
-          completed: firebase.firestore.Timestamp.now()
-        });
-        location.reload();
-      };
-      workArea.appendChild(document.createElement("br"));
-      workArea.appendChild(button);
-    }
+  const completedTime = data[nickname];
+
+  appDiv.innerHTML = `
+    <h2>🎉 數位小兔 ${todayKey} 工作流程！</h2>
+    <p>哈囉，${nickname}！</p>
+    <p><button id="finishBtn">🕤 9:30 阿寶交代</button></p>
+    <p id="resultArea">${completedTime ? `✔️ ${nickname} 在 ${completedTime}` : ""}</p>
+    <p><button id="logoutBtn">登出</button></p>
+  `;
+
+  document.getElementById("finishBtn").addEventListener("click", async () => {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString("zh-TW", { hour: '2-digit', minute: '2-digit', hour12: false });
+    await docRef.set({ [nickname]: timeStr }, { merge: true });
+    document.getElementById("resultArea").textContent = `✔️ ${nickname} 在 ${timeStr}`;
   });
 
-  window.logout = () => {
-    firebase.auth().signOut().then(() => {
-      location.reload();
-    });
-  };
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    auth.signOut();
+  });
 });

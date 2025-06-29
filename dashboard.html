@@ -1,26 +1,14 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Rabbithome Dashboard</title>
-  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyANuDJyJuQbxnXq-FTyaTAI9mSc6zpmuWs",
-      authDomain: "rabbithome-auth.firebaseapp.com",
-      projectId: "rabbithome-auth",
-      storageBucket: "rabbithome-auth.appspot.com",
-      messagingSenderId: "50928677930",
-      appId: "1:50928677930:web:e8eff13c8028b888537f53"
-    };
-    firebase.initializeApp(firebaseConfig);
-  </script>
-  <script src="./dashboard.js"></script>
+  <title>Rabbithome 工作區</title>
+  <meta charset="utf-8" />
 </head>
 <body>
-  載入中...
+  <div id="app">載入中...</div>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore-compat.js"></script>
+  <script src="./dashboard.js"></script>
 </body>
 </html>
