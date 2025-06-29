@@ -11,7 +11,6 @@ import {
   setDoc
 } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
-// Firebase 設定
 const firebaseConfig = {
   apiKey: "AIzaSyANuDJyJuQbxnXq-FTyaTAI9mSc6zpmuWs",
   authDomain: "rabbithome-auth.firebaseapp.com",
@@ -28,12 +27,10 @@ const db = getFirestore(app);
 let currentUser = null;
 let currentNickname = null;
 
-// 顯示今日日期在主標題
 const today = new Date();
 const formattedDate = today.toLocaleDateString("zh-TW");
 document.getElementById("mainTitle").textContent = `🎉 數位小兔 ${formattedDate} 工作流程！`;
 
-// 監聽登入狀態
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
@@ -54,21 +51,22 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// 檢查今日是否已完成
 async function checkWorkStatus() {
   const logRef = doc(db, "worklog", formattedDate);
   const logSnap = await getDoc(logRef);
 
-  if (logSnap.exists() && logSnap.data()[currentNickname]) {
-    const time = logSnap.data()[currentNickname];
-    document.getElementById("completedStatus").textContent =
-      `✔️ ${currentNickname} 在 ${time} 完成`;
+  if (logSnap.exists()) {
+    const data = logSnap.data();
+    if (data[currentNickname]) {
+      const time = data[currentNickname];
+      document.getElementById("completedStatus").textContent =
+        `✔️ ${currentNickname} 在 ${time} 完成`;
+    }
   } else {
     document.getElementById("completedStatus").textContent = "尚未完成今日工作";
   }
 }
 
-// 打卡按鈕事件
 document.getElementById("markDone").textContent = "🕤 9:30 阿寶交代";
 document.getElementById("markDone").addEventListener("click", async () => {
   const now = new Date();
@@ -83,7 +81,6 @@ document.getElementById("markDone").addEventListener("click", async () => {
     `✔️ ${currentNickname} 在 ${timeString} 完成`;
 });
 
-// 登出按鈕
 document.getElementById("logout").addEventListener("click", () => {
   signOut(auth).then(() => {
     window.location.href = "index.html";
