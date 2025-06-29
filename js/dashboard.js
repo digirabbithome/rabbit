@@ -1,98 +1,133 @@
-
-// dashboard.js: Enhanced dashboard with shared work status
-
-import { getFirestore, collection, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-lite.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  getDocs,
+  serverTimestamp,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 // Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyANuDJyJuQbxnXq-FTyaTAI9mSc6zpmuWs",
   authDomain: "rabbithome-auth.firebaseapp.com",
   projectId: "rabbithome-auth",
+  storageBucket: "rabbithome-auth.appspot.com",
+  messagingSenderId: "50928677930",
+  appId: "1:50928677930:web:e8eff13c8028b888537f53"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+const sidebar = document.getElementById("sidebar");
+const content = document.getElementById("content");
+
 const tasks = [
-  "9:30 阿寶交代", "9:30 點錢", "9:30 QA", "11:30 QA", "1:30 QA",
-  "3:00 QA", "5:00 QA", "6:30 QA", "3:00 叫貨", "6:30 叫貨",
-  "每日阿寶交代", "每日花花LINE", "每日追蹤開年"
+  "9:30 阿寶交代",
+  "9:30 點錢",
+  "9:30 QA",
+  "11:30 QA",
+  "1:30 QA",
+  "3:00 QA",
+  "5:00 QA",
+  "6:30 QA",
+  "3:00 叫貨",
+  "6:30 叫貨",
+  "每日阿寶交代",
+  "每日花花LINE",
+  "每日追蹤開年"
 ];
 
-function getToday() {
-  const now = new Date();
-  return now.toISOString().split("T")[0];
-}
-
-function renderDashboard(nickname) {
-  const content = document.getElementById("content");
-  const today = getToday();
-  const dateHeader = `🎉 數位小兔 ${today} 工作流程！`;
-  const greeting = `哈囉，${nickname}！`;
-  content.innerHTML = `<h3>${dateHeader}</h3><p>${greeting}</p>`;
-
-  tasks.forEach(task => {
-    const taskDiv = document.createElement("div");
-    taskDiv.textContent = `🕤 ${task}`;
-    taskDiv.id = `task-${task}`;
-
-    const btn = document.createElement("button");
-    btn.textContent = `✔️ ${task}`;
-    btn.onclick = async () => {
-      const time = new Date().toTimeString().split(":").slice(0, 2).join(":");
-      const ref = doc(db, "daily", today);
-      const snap = await getDoc(ref);
-      const data = snap.exists() ? snap.data() : {};
-      if (!data[task]) data[task] = [];
-      if (!data[task].some(entry => entry.name === nickname)) {
-        data[task].push({ name: nickname, time });
-        await setDoc(ref, data);
-      }
-    };
-
-    content.appendChild(taskDiv);
-    content.appendChild(btn);
-  });
-
-  // Listen for updates
-  const ref = doc(db, "daily", today);
-  onSnapshot(ref, (snap) => {
-    const data = snap.exists() ? snap.data() : {};
-    for (const task in data) {
-      const line = document.getElementById(`task-${task}`);
-      if (line) {
-        const logs = data[task].map(entry => `✔️ ${entry.name} 在 ${entry.time}`).join(" ");
-        line.textContent = `🕤 ${task} ${logs}`;
-      }
-    }
-  });
-}
-
-function setupSidebar(nickname) {
-  const sidebar = document.getElementById("sidebar");
+function renderSidebar() {
   sidebar.innerHTML = `
-    <h3>📋 工具列</h3>
-    <button onclick="location.reload()">每日工作</button>
-    <button onclick="firebaseSignOut()">登出</button>
+    <h2>📋 工具列</h2>
+    <ul>
+      <li><button id="btn-work">每日工作</button></li>
+      <li><button id="btn-logout">登出</button></li>
+    </ul>
   `;
+  document.getElementById("btn-logout").onclick = () => {
+    signOut(auth);
+  };
+  document.getElementById("btn-work").onclick = () => {
+    loadDashboardUI();
+  };
 }
 
-function firebaseSignOut() {
-  signOut(auth).then(() => location.href = "/");
+function formatTime(timestamp) {
+  const date = timestamp.toDate();
+  return `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
 }
 
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    location.href = "/";
-    return;
+async function loadDashboardUI() {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const userDoc = await getDoc(doc(db, "users", user.uid));
+  const nickname = userDoc.exists() ? userDoc.data().nickname : user.email;
+
+  const today = new Date().toISOString().split("T")[0];
+  const todayTasksRef = collection(db, "worklogs", today, "tasks");
+  const allTaskDocs = await getDocs(todayTasksRef);
+
+  const taskStatus = {};
+  allTaskDocs.forEach(docSnap => {
+    const task = docSnap.id;
+    const data = docSnap.data();
+    taskStatus[task] = data.completed || {};
+  });
+
+  let html = `<h2>🎉 數位小兔 ${today} 工作流程！</h2>`;
+  html += `<p>哈囉，${nickname}！</p>`;
+
+  for (const task of tasks) {
+    html += `<div>🕤 ${task}`;
+
+    const whoCompleted = taskStatus[task];
+    for (const [nick, time] of Object.entries(whoCompleted || {})) {
+      html += ` ✔️ ${nick} 在 ${formatTime(time)}`;
+    }
+
+    html += ` <button data-task="${task}">完成</button></div>`;
   }
-  const uid = user.uid;
-  const nicknameRef = doc(db, "nicknames", uid);
-  const nicknameSnap = await getDoc(nicknameRef);
-  const nickname = nicknameSnap.exists() ? nicknameSnap.data().name : "使用者";
-  setupSidebar(nickname);
-  renderDashboard(nickname);
+
+  content.innerHTML = html;
+
+  // 綁定完成按鈕
+  document.querySelectorAll("button[data-task]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const task = btn.dataset.task;
+      const user = auth.currentUser;
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const nickname = userDoc.exists() ? userDoc.data().nickname : user.email;
+
+      const taskRef = doc(db, "worklogs", today, "tasks", task);
+      const taskSnap = await getDoc(taskRef);
+      const existing = taskSnap.exists() ? taskSnap.data().completed || {} : {};
+
+      existing[nickname] = serverTimestamp();
+      await setDoc(taskRef, { completed: existing }, { merge: true });
+
+      loadDashboardUI(); // Refresh
+    });
+  });
+}
+
+onAuthStateChanged(auth, async user => {
+  if (user) {
+    renderSidebar();
+    await loadDashboardUI();
+  } else {
+    window.location.href = "index.html";
+  }
 });
