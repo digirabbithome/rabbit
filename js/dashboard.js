@@ -1,1 +1,2 @@
-// Dashboard 主邏輯，包含任務與完成狀態處理（略）
+// dashboard.js: handles dashboard UI
+console.log('dashboard.js loaded');

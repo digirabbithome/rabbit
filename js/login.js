@@ -1,1 +1,2 @@
-// Firebase 登入功能邏輯（略）
+// login.js: handles login functionality
+console.log('login.js loaded');
