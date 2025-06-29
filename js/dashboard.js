@@ -1,32 +1,37 @@
-// js/dashboard.js
 document.addEventListener("DOMContentLoaded", () => {
-  // 模擬綽號（實際上這應該從 Firebase 讀取）
   const nickname = localStorage.getItem("nickname") || "小兔";
 
-  // 左側選單
+  // 左側工具列
   document.getElementById("sidebar").innerHTML = `
-    <div style="padding: 1rem; background-color: #f0f0f0; height: 100vh;">
-      <h3>📋 工具列</h3>
-      <ul style="list-style: none; padding-left: 0;">
-        <li><a href="#" id="workBtn">每日工作</a></li>
-        <li><a href="#" id="logoutBtn">登出</a></li>
-      </ul>
-    </div>
+    <h3>📋 工具列</h3>
+    <a href="#" id="workBtn">每日工作</a>
+    <a href="#" id="logoutBtn">登出</a>
   `;
 
-  // 右側內容
-  document.getElementById("content").innerHTML = `
-    <div style="padding: 1rem;">
+  // 點「每日工作」時載入內容
+  const renderWork = () => {
+    document.getElementById("content").innerHTML = `
       <h2>🎉 數位小兔 今日工作</h2>
       <p>哈囉，${nickname}！這是你的工作主頁</p>
-    </div>
-  `;
+      <ul>
+        <li>🕤 9:30 阿寶交代</li>
+        <li>🕤 9:30 QA</li>
+        <li>🕤 11:30 QA</li>
+      </ul>
+    `;
+  };
 
-  // 登出機制
+  // 預設顯示工作頁
+  renderWork();
+
+  document.getElementById("workBtn").addEventListener("click", (e) => {
+    e.preventDefault();
+    renderWork();
+  });
+
+  // 登出
   document.getElementById("logoutBtn").addEventListener("click", () => {
     localStorage.removeItem("nickname");
     window.location.href = "/";
   });
-
-  // 其他功能可後續補上
 });
