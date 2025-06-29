@@ -13,18 +13,21 @@
     main { flex-grow: 1; background: #f0f4ff; padding: 40px; }
     button { padding: 10px 20px; background-color: #2e7eff; color: white; border: none; border-radius: 5px; margin-top: 10px; }
     .log { margin-top: 20px; font-size: 16px; }
+    #logList { background: white; padding: 10px; border-radius: 5px; margin-top: 10px; }
   </style>
 </head>
 <body>
   <aside>
     <h2>功能選單</h2>
     <p>🕒 每日打卡</p>
+    <button onclick="loadStatus()">🔄 重新載入</button>
   </aside>
   <main>
     <h1>🎯 今日工作日誌</h1>
     <p>請於 10:00 前點擊完成：</p>
     <button onclick="markDone()">✅ 完成工作</button>
-    <div class="log" id="statusLog"></div>
+    <div class="log" id="statusLog">載入中...</div>
+    <div id="logList"></div>
   </main>
 
   <script>
@@ -38,12 +41,13 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-
     let userEmail = "";
+
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         userEmail = user.email;
         loadStatus();
+        setInterval(loadStatus, 10000); // 每 10 秒更新一次
       } else {
         window.location.href = "index.html";
       }
@@ -61,6 +65,7 @@
 
     function loadStatus() {
       const today = new Date().toISOString().split("T")[0];
+      document.getElementById("statusLog").textContent = `📅 今日紀錄 (${today})`;
       db.collection("worklog")
         .where("date", "==", today)
         .orderBy("time")
@@ -70,7 +75,7 @@
             const d = doc.data();
             return `✔️ ${d.user} 在 ${d.time} 完成`;
           }).join("<br>");
-          document.getElementById("statusLog").innerHTML = log || "尚無人完成";
+          document.getElementById("logList").innerHTML = log || "尚無人完成";
         });
     }
   </script>
