@@ -1,38 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>登入</title>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
+  <title>Rabbithome Login</title>
+  <script type="module" src="js/login.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <h2>登入頁面</h2>
-  <form id="loginForm">
-    <input type="email" id="email" placeholder="Email"><br>
-    <input type="password" id="password" placeholder="Password"><br>
-    <button type="submit">登入</button>
-  </form>
-  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyANuDJyJuQbxnXq-FTyaTAI9mSc6zpmuWs",
-      authDomain: "rabbithome-auth.firebaseapp.com",
-      projectId: "rabbithome-auth"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
-          window.location.href = "dashboard.html";
-        })
-        .catch(error => {
-          alert("登入失敗：" + error.message);
-        });
-    });
-  </script>
+  <div id="login-container">
+    <h1>Rabbithome 登入系統</h1>
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+    <button id="login-btn">登入</button>
+    <p id="login-error" style="color:red;"></p>
+  </div>
 </body>
 </html>
