@@ -2,130 +2,15 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8" />
-  <title>Rabbithome 主畫面</title>
-  <style>
-    body {
-      font-family: "Helvetica", sans-serif;
-      margin: 0;
-      display: flex;
-    }
-    #sidebar {
-      width: 200px;
-      background-color: #f0f0f0;
-      height: 100vh;
-      padding: 20px;
-    }
-    #main {
-      flex-grow: 1;
-      padding: 20px;
-    }
-    button {
-      padding: 10px;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-    .status-list {
-      margin-top: 20px;
-    }
-  </style>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, getDocs, collection, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyANuDJyJuQbxnXq-FTyaTAI9mSc6zpmuWs",
-      authDomain: "rabbithome-auth.firebaseapp.com",
-      projectId: "rabbithome-auth",
-      storageBucket: "rabbithome-auth.appspot.com",
-      messagingSenderId: "50928677930",
-      appId: "1:50928677930:web:e8eff13c8028b888537f53"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const nicknameElement = document.getElementById("nickname");
-    const statusListElement = document.getElementById("statusList");
-
-    let currentUserEmail = "";
-    let currentNickname = "";
-
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        currentUserEmail = user.email;
-        const docRef = doc(db, "nicknames", currentUserEmail);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          currentNickname = docSnap.data().nickname;
-          document.getElementById("nickname").innerText = "哈囉，" + currentNickname + "！";
-        } else {
-          window.location.href = "nickname.html";
-        }
-
-        // 檢查今天是否打卡
-        const today = new Date().toISOString().split("T")[0];
-        const statusRef = doc(db, "daily_status", today);
-        const statusSnap = await getDoc(statusRef);
-        const allData = statusSnap.exists() ? statusSnap.data() : {};
-        if (allData[currentUserEmail]) {
-          document.getElementById("completedStatus").innerText = "✔️ 你已於 " + allData[currentUserEmail] + " 完成今日工作";
-        }
-
-        // 顯示所有人狀態
-        let html = "";
-        for (let key in allData) {
-          const nicknameDoc = await getDoc(doc(db, "nicknames", key));
-          const nickname = nicknameDoc.exists() ? nicknameDoc.data().nickname : key;
-          html += `<li>${nickname} ✅ ${allData[key]}</li>`;
-        }
-        statusListElement.innerHTML = html;
-
-      } else {
-        window.location.href = "index.html";
-      }
-    });
-
-    document.getElementById("markDone").addEventListener("click", async () => {
-      const now = new Date().toLocaleTimeString("zh-TW", { hour12: false });
-      const today = new Date().toISOString().split("T")[0];
-      const statusRef = doc(db, "daily_status", today);
-
-      await updateDoc(statusRef, {
-        [currentUserEmail]: now
-      }).catch(async () => {
-        await setDoc(statusRef, {
-          [currentUserEmail]: now
-        });
-      });
-
-      document.getElementById("completedStatus").innerText = "✔️ 你已於 " + now + " 完成今日工作";
-      location.reload(); // 重新整理狀態列表
-    });
-
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      signOut(auth).then(() => {
-        window.location.href = "index.html";
-      });
-    });
-  </script>
+  <title>Rabbithome 工作區</title>
 </head>
 <body>
-  <div id="sidebar">
-    <h3>Rabbithome 工具列</h3>
-    <button id="logoutBtn">登出</button>
-  </div>
-  <div id="main">
-    <h2>🎉 歡迎進入 Rabbithome 工作區！</h2>
-    <p id="nickname"></p>
-    <p id="completedStatus">尚未完成今日工作</p>
-    <button id="markDone">✔️ 完成今日工作</button>
+  <h1 id="mainTitle">🎉 數位小兔 工作流程！</h1>
+  <div id="nickname">哈囉，小兔！</div>
+  <div id="completedStatus">尚未完成今日工作</div>
+  <button id="markDone">🕤 9:30 阿寶交代</button>
+  <button id="logout">登出</button>
 
-    <div class="status-list">
-      <h3>📋 今日完成情況：</h3>
-      <ul id="statusList"></ul>
-    </div>
-  </div>
+  <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
