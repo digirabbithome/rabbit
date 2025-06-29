@@ -31,19 +31,23 @@ auth.onAuthStateChanged(async (user) => {
 
   const completedTime = data[nickname];
 
+  let statusList = "";
+  for (const [nick, time] of Object.entries(data)) {
+    statusList += `✔️ ${nick} 在 ${time}<br>`;
+  }
+
   appDiv.innerHTML = `
     <h2>🎉 數位小兔 ${todayKey} 工作流程！</h2>
     <p>哈囉，${nickname}！</p>
     <p><button id="finishBtn">🕤 9:30 阿寶交代</button></p>
-    <p id="resultArea">${completedTime ? `✔️ ${nickname} 在 ${completedTime}` : ""}</p>
-    <p><button id="logoutBtn">登出</button></p>
+    <div id="resultArea">${statusList}</div>
   `;
 
   document.getElementById("finishBtn").addEventListener("click", async () => {
     const now = new Date();
     const timeStr = now.toLocaleTimeString("zh-TW", { hour: '2-digit', minute: '2-digit', hour12: false });
     await docRef.set({ [nickname]: timeStr }, { merge: true });
-    document.getElementById("resultArea").textContent = `✔️ ${nickname} 在 ${timeStr}`;
+    location.reload();
   });
 
   document.getElementById("logoutBtn").addEventListener("click", () => {
