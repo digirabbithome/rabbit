@@ -1,11 +1,21 @@
+// firebase.js
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+// ✅ 你的專案專屬 Firebase 設定
 const firebaseConfig = {
-  apiKey: "AIzaSy...yourkey...",
-  authDomain: "your-project-id.firebaseapp.com",
-  projectId: "your-project-id",
+  apiKey: "AIzaSyANuDJyJuQbxnXq-FTyaTAI9mSc6zpmuWs",
+  authDomain: "rabbithome-auth.firebaseapp.com",
+  projectId: "rabbithome-auth",
+  storageBucket: "rabbithome-auth.appspot.com",
+  messagingSenderId: "50928677930",
+  appId: "1:50928677930:web:e8eff13c8028b888537f53"
 };
 
 export function initializeFirebase() {
