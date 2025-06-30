@@ -1,14 +1,13 @@
 import { logout } from './firebase.js';
+
 export function loadSidebar() {
   const sidebar = document.getElementById('sidebar');
   sidebar.innerHTML = `
     <h3>📋 工具列</h3>
-    <button id="daily">每日工作</button>
-    <button onclick="logout()">登出</button>
+    <ul>
+      <li><a href="#" id="dailyTasksLink">每日工作</a></li>
+      <li><a href="#" id="logoutLink">登出</a></li>
+    </ul>
   `;
-  document.getElementById('daily').onclick = () => {
-    import('./dailyTasks.js').then(module => {
-      module.loadDailyTasks(JSON.parse(localStorage.getItem('user')));
-    });
-  };
+  document.getElementById('logoutLink').addEventListener('click', logout);
 }

@@ -17,8 +17,12 @@ export function initializeFirebase() {
 export function login(email, password) {
   const auth = getAuth();
   signInWithEmailAndPassword(auth, email, password)
-    .then(() => window.location.href = 'dashboard.html')
-    .catch(error => alert("登入失敗：" + error.message));
+    .then(() => {
+      window.location.href = "dashboard.html";
+    })
+    .catch(error => {
+      alert("登入失敗：" + error.message);
+    });
 }
 
 export function checkAuth() {
@@ -33,5 +37,7 @@ export function checkAuth() {
 
 export function logout() {
   const auth = getAuth();
-  signOut(auth).then(() => window.location.href = "index.html");
+  signOut(auth).then(() => {
+    window.location.href = "index.html";
+  });
 }
