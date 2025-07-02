@@ -5,7 +5,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyANuDJyJuQbxnXq-FTyaTAI9mSc6zpmuWs",
   authDomain: "rabbithome-auth.firebaseapp.com",
   projectId: "rabbithome-auth",
-  storageBucket: "rabbithome-auth.firebasestorage.app",
+  storageBucket: "rabbithome-auth.appspot.com",
   messagingSenderId: "50928677930",
   appId: "1:50928677930:web:e8eff13c8028b888537f53"
 };
@@ -29,8 +29,12 @@ export function checkAuth() {
   const auth = getAuth();
   return new Promise((resolve, reject) => {
     onAuthStateChanged(auth, user => {
-      if (user) resolve(user);
-      else window.location.href = "index.html";
+      if (user) {
+        localStorage.setItem('user', JSON.stringify({ email: user.email }));
+        resolve({ email: user.email });
+      } else {
+        window.location.href = "index.html";
+      }
     });
   });
 }
