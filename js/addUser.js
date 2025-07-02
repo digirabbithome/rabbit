@@ -1,1 +1,1 @@
-export function loadAddUserForm() { document.getElementById('mainContent').innerHTML = '👤 新增帳號頁面'; }
+export function loadAddUserForm() { document.getElementById('mainContent').innerHTML = '<h2>👤 新增帳號</h2>'; }

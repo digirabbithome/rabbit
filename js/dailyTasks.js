@@ -1,1 +1,1 @@
-export function loadDailyTasks() { document.getElementById('mainContent').innerHTML = '🕘 每日工作頁面'; }
+export function loadDailyTasks() { document.getElementById('mainContent').innerHTML = '<h2>🗓️ 每日工作</h2>'; }
