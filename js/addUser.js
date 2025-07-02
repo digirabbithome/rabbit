@@ -1,4 +1,10 @@
 
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+
+const auth = getAuth();
+const db = getFirestore();
+
 export function loadAddUserForm() {
   const main = document.getElementById("mainContent");
   main.innerHTML = `
@@ -18,5 +24,37 @@ export function loadAddUserForm() {
       <input type="password" id="password" placeholder="密碼" required /><br>
       <button type="submit">送出</button>
     </form>
+    <p id="addUserStatus"></p>
   `;
+
+  const form = document.getElementById("addUserForm");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const name = document.getElementById("name").value;
+    const birthday = document.getElementById("birthday").value;
+    const nickname = document.getElementById("nickname").value;
+    const password = document.getElementById("password").value;
+    const group = document.getElementById("group").value;
+    const status = document.getElementById("addUserStatus");
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = userCredential.user.uid;
+
+      await setDoc(doc(db, "users", uid), {
+        email,
+        name,
+        birthday,
+        nickname,
+        group
+      });
+
+      status.textContent = "✅ 成功新增帳號！";
+      form.reset();
+    } catch (error) {
+      console.error("新增帳號失敗", error);
+      status.textContent = `❌ 錯誤：${error.message}`;
+    }
+  });
 }
