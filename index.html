@@ -1,13 +1,28 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>登入</title>
-  </head>
-  <body>
-    <h1>登入頁面</h1>
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Password" />
-    <button onclick="loginClick()">登入</button>
-    <script type="module" src="js/login.js"></script>
-  </body>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rabbithome</title>
+  <script type="module" src="./js/firebase.js"></script>
+  <script type="module" src="./js/dashboard.js"></script>
+  <script type="module" src="./js/sidebar.js"></script>
+  <script type="module" src="./js/dailyTasks.js"></script>
+  <style>
+    body { font-family: sans-serif; margin: 0; display: flex; }
+    nav { background: #f0f0f0; padding: 10px; width: 200px; display: none; }
+    main { flex: 1; padding: 20px; }
+  </style>
+</head>
+<body>
+  <nav id="sidebar">
+    <h3>📋 工具列</h3>
+    <ul>
+      <li><a href="#" id="menu-daily">每日工作</a></li>
+      <li><a href="#" onclick="logout()">登出</a></li>
+    </ul>
+  </nav>
+  <main id="main-content">
+    <h2>請先登入</h2>
+  </main>
+</body>
 </html>
