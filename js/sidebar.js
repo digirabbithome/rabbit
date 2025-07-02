@@ -4,9 +4,12 @@ import { loadMemberManagement } from './memberManagement.js';
 import { loadDailyTasks } from './dailyTasks.js';
 import { logout } from './auth.js';
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("dailyTasksBtn").addEventListener("click", loadDailyTasks);
-  document.getElementById("addUserBtn").addEventListener("click", loadAddUserForm);
-  document.getElementById("memberMgmtBtn").addEventListener("click", loadMemberManagement);
-  document.getElementById("logoutBtn").addEventListener("click", logout);
-});
+function safeBind(id, handler) {
+  const btn = document.getElementById(id);
+  if (btn) btn.addEventListener("click", handler);
+}
+
+safeBind("dailyTasksBtn", loadDailyTasks);
+safeBind("addUserBtn", loadAddUserForm);
+safeBind("memberMgmtBtn", loadMemberManagement);
+safeBind("logoutBtn", logout);
