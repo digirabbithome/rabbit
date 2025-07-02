@@ -1,47 +1,29 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+// 這是 firebase.js 範本，請替換為你自己的 Firebase 設定
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { showDashboard } from './dashboard.js';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyANuDJyJuQbxnXq-FTyaTAI9mSc6zpmuWs",
-  authDomain: "rabbithome-auth.firebaseapp.com",
-  projectId: "rabbithome-auth",
-  storageBucket: "rabbithome-auth.appspot.com",
-  messagingSenderId: "50928677930",
-  appId: "1:50928677930:web:e8eff13c8028b888537f53"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_BUCKET",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 
-export function initializeFirebase() {
-  initializeApp(firebaseConfig);
-}
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+export const auth = getAuth(app);
 
-export function login(email, password) {
-  const auth = getAuth();
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      window.location.href = "dashboard.html";
-    })
-    .catch(error => {
-      alert("登入失敗：" + error.message);
-    });
-}
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    localStorage.setItem('nickname', '小兔'); // 這裡設定預設暱稱
+    showDashboard(user);
+  }
+});
 
-export function checkAuth() {
-  const auth = getAuth();
-  return new Promise((resolve, reject) => {
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        localStorage.setItem('user', JSON.stringify({ email: user.email }));
-        resolve({ email: user.email });
-      } else {
-        window.location.href = "index.html";
-      }
-    });
-  });
-}
-
-export function logout() {
-  const auth = getAuth();
-  signOut(auth).then(() => {
-    window.location.href = "index.html";
-  });
-}
+window.logout = () => {
+  signOut(auth).then(() => location.reload());
+};
