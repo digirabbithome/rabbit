@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>數位小兔後台系統</title>
+  <link rel="stylesheet" href="css/cute.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", sans-serif;
+    }
+    .sidebar {
+      width: 220px;
+      background-color: #ffe6f0;
+      position: fixed;
+      height: 100vh;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+    .sidebar h2 {
+      margin-top: 0;
+    }
+    .sidebar button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: none;
+      background-color: #ff9ecf;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .sidebar button:hover {
+      background-color: #ff85c1;
+    }
+    .main-content {
+      margin-left: 240px;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>📋 工具列</h2>
+    <button onclick="loadDailyTasks()">每日工作</button>
+    <button onclick="loadAddUserForm()">新增帳號</button>
+    <button onclick="loadMemberManagement()">會員管理</button>
+    <button onclick="logout()">登出</button>
+  </div>
+  <div class="main-content" id="mainContent">
+    <h2>🎉 歡迎使用數位小兔後台系統！</h2>
+    <p>請從左側工具列選擇功能</p>
+  </div>
+  <script type="module" src="js/dashboard.js"></script>
+  <script type="module" src="js/sidebar.js"></script>
+</body>
+</html>
