@@ -1,10 +1,12 @@
-import { initializeFirebase, checkAuth } from './firebase.js';
-import { loadSidebar } from './sidebar.js';
 import { loadDailyTasks } from './dailyTasks.js';
 
-initializeFirebase();
+export function showDashboard(user) {
+  const main = document.getElementById('main-content');
+  main.innerHTML = `
+    <h2>🎉 歡迎 ${user.email}！</h2>
+    <p>請從左側選單選擇功能。</p>
+  `;
 
-checkAuth().then(user => {
-  loadSidebar();
-  loadDailyTasks(user);
-});
+  // 顯示左側選單
+  document.getElementById('sidebar').style.display = 'block';
+}
