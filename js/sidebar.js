@@ -1,4 +1,6 @@
+import { loadDailyTasks } from './dailyTasks.js';
 import { loadAddUserForm } from './addUser.js';
+import { loadMemberManagement } from './memberManagement.js';
 import { logout } from './firebase.js';
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -9,6 +11,8 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  bind("dailyTasksBtn", loadDailyTasks);
   bind("addUserBtn", loadAddUserForm);
+  bind("memberMgmtBtn", loadMemberManagement);
   bind("logoutBtn", logout);
 });

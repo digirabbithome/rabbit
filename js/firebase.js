@@ -1,1 +1,1 @@
-export function logout() { location.href = 'login.html'; }
+export function logout() { window.location.href = "login.html"; }
