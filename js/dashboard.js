@@ -1,10 +1,10 @@
-import { loadDailyTasks } from './dailyTasks.js';
 
-export function showDashboard(user) {
-  const main = document.getElementById('main-content');
-  main.innerHTML = `
-    <h2>🎉 歡迎 ${user.email}！</h2>
-    <p>請從左側選單選擇功能。</p>
-  `;
-  document.getElementById('sidebar').style.display = 'block';
-}
+import { loadDailyTasks } from './dailyTasks.js';
+import { loadAddUserForm } from './addUser.js';
+import { loadMemberManagement } from './memberManagement.js';
+import { logout } from './auth.js';
+
+window.loadDailyTasks = loadDailyTasks;
+window.loadAddUserForm = loadAddUserForm;
+window.loadMemberManagement = loadMemberManagement;
+window.logout = logout;
