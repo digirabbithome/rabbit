@@ -1,1 +1,0 @@
-export function loadDailyTasks() { document.getElementById("mainContent").innerHTML = "<h2>🕘 每日工作</h2><p>這是每日工作頁面</p>"; }
