@@ -1,12 +1,9 @@
 
-import { loadDailyTasks } from './dailyTasks.js';
-import { loadAddUserForm } from './addUser.js';
-import { loadMemberManagement } from './memberManagement.js';
-import { logout } from './firebase.js';
+import { loadDailyTasks, loadAddUserForm, loadMemberManagement, logout } from './sidebar.js';
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("btnDaily")?.addEventListener("click", loadDailyTasks);
-  document.getElementById("btnAddUser")?.addEventListener("click", loadAddUserForm);
-  document.getElementById("btnManage")?.addEventListener("click", loadMemberManagement);
-  document.getElementById("btnLogout")?.addEventListener("click", logout);
+window.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("dailyTasksBtn")?.addEventListener("click", loadDailyTasks);
+  document.getElementById("addUserBtn")?.addEventListener("click", loadAddUserForm);
+  document.getElementById("memberMgmtBtn")?.addEventListener("click", loadMemberManagement);
+  document.getElementById("logoutBtn")?.addEventListener("click", logout);
 });
