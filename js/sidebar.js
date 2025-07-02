@@ -4,7 +4,7 @@ import { loadAddUserForm } from './addUser.js';
 import { loadMemberManagement } from './memberManagement.js';
 import { logout } from './firebase.js';
 
-document.addEventListener("DOMContentLoaded", () => {
+export function bindSidebarEvents() {
   const btnDaily = document.getElementById("btnDailyTasks");
   const btnAddUser = document.getElementById("btnAddUser");
   const btnMember = document.getElementById("btnMemberManage");
@@ -14,4 +14,4 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnAddUser) btnAddUser.addEventListener("click", loadAddUserForm);
   if (btnMember) btnMember.addEventListener("click", loadMemberManagement);
   if (btnLogout) btnLogout.addEventListener("click", logout);
-});
+}
