@@ -1,4 +1,6 @@
+import { loadDailyTasks } from './dailyTasks.js';
 import { loadAddUserForm } from './addUser.js';
+import { loadUserManager } from './userManager.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const dailyTaskBtn = document.getElementById('menu-daily');
