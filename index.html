@@ -1,34 +1,31 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <title>Rabbithome</title>
-  <script type="module" src="./js/firebase.js"></script>
-  <script type="module" src="./js/dashboard.js"></script>
-  <script type="module" src="./js/sidebar.js"></script>
-  <script type="module" src="./js/dailyTasks.js"></script>
-  <script type="module" src="./js/addUser.js"></script>
-  <script type="module" src="./js/userManager.js"></script>
+  <meta charset="UTF-8">
+  <title>數位小兔後台系統</title>
+  <link rel="stylesheet" href="css/cute.css">
+  <link rel="stylesheet" href="css/sidebar.css">
   <style>
-    body { font-family: sans-serif; margin: 0; display: flex; }
-    nav { background: #f0f0f0; padding: 10px; width: 200px; display: none; }
-    main { flex: 1; padding: 20px; }
-    input { padding: 8px; margin: 4px 0; display: block; width: 100%; }
-    button { padding: 8px 16px; margin-top: 8px; }
+    .main-content {
+      margin-left: 220px;
+      padding: 20px;
+      font-family: "Noto Sans TC", sans-serif;
+    }
   </style>
 </head>
 <body>
-  <nav id="sidebar">
-    <h3>📋 工具列</h3>
-    <ul>
-      <li><a href="#" id="menu-daily">每日工作</a></li>
-      <li><a href="#" id="menu-adduser">新增帳號</a></li>
-      <li><a href="#" id="menu-users">會員管理</a></li>
-      <li><a href="#" onclick="logout()">登出</a></li>
-    </ul>
-  </nav>
-  <main id="main-content">
-    <h2>請先登入</h2>
-  </main>
+  <div class="sidebar">
+    <h2>📋 工具列</h2>
+    <button onclick="loadDailyTasks()">每日工作</button>
+    <button onclick="loadAddUserForm()">新增帳號</button>
+    <button onclick="loadMemberManagement()">會員管理</button>
+    <button onclick="logout()">登出</button>
+  </div>
+  <div class="main-content" id="mainContent">
+    <h2>🎉 歡迎使用數位小兔後台系統！</h2>
+    <p>請從左側工具列選擇功能</p>
+  </div>
+  <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
