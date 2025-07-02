@@ -1,4 +1,5 @@
 import { loadAddUserForm } from './addUser.js';
+import { logout } from './firebase.js';
 
 window.addEventListener("DOMContentLoaded", () => {
   const bind = (id, fn) => {
@@ -9,4 +10,5 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   bind("addUserBtn", loadAddUserForm);
+  bind("logoutBtn", logout);
 });
