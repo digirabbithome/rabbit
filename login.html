@@ -1,24 +1,22 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>登入 Rabbithome</title>
-  <script type="module" src="./js/login.js"></script>
-  <style>
-    body { font-family: sans-serif; padding: 40px; }
-    form { max-width: 400px; margin: auto; display: flex; flex-direction: column; gap: 12px; }
-    input { padding: 8px; font-size: 16px; }
-    button { padding: 10px; font-size: 16px; background: #2196f3; color: white; border: none; cursor: pointer; }
-    button:hover { background: #1976d2; }
-  </style>
+  <title>數位小兔登入</title>
+  <link rel="stylesheet" href="cute.css">
 </head>
 <body>
-  <h2>🔐 數位小兔登入系統</h2>
-  <form id="login-form">
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="密碼" required />
-    <button type="submit">登入</button>
-    <p id="status" style="color: red;"></p>
-  </form>
+  <div class="login-container">
+    <img src="logo.png" alt="數位小兔 LOGO" class="logo">
+    <h1>歡迎登入 🐰</h1>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="📧 請輸入 Email" required>
+      <input type="password" id="password" placeholder="🔐 請輸入密碼" required>
+      <button type="submit">登入</button>
+    </form>
+    <p id="error-message"></p>
+  </div>
+  <script type="module" src="js/login.js"></script>
 </body>
 </html>
