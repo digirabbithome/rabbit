@@ -24,5 +24,8 @@ onAuthStateChanged(auth, (user) => {
 });
 
 window.logout = () => {
-  signOut(auth).then(() => location.reload());
+  signOut(auth).then(() => {
+    localStorage.removeItem('nickname');
+    window.location.href = "login.html";
+  });
 };
