@@ -1,0 +1,1 @@
+export function loadMemberManagement() { document.getElementById('mainContent').innerHTML = '<h3>👥 會員管理頁面</h3>'; }
