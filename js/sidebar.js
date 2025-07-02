@@ -1,30 +1,17 @@
+
 import { loadDailyTasks } from './dailyTasks.js';
 import { loadAddUserForm } from './addUser.js';
-import { loadUserManager } from './userManager.js';
+import { loadMemberManagement } from './memberManagement.js';
+import { logout } from './auth.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const dailyTaskBtn = document.getElementById('menu-daily');
-  const addUserBtn = document.getElementById('menu-adduser');
-  const userManagerBtn = document.getElementById('menu-users');
+document.addEventListener("DOMContentLoaded", () => {
+  const btnDaily = document.querySelector("button[onclick=\"loadDailyTasks()\"]");
+  const btnAddUser = document.querySelector("button[onclick=\"loadAddUserForm()\"]");
+  const btnMember = document.querySelector("button[onclick=\"loadMemberManagement()\"]");
+  const btnLogout = document.querySelector("button[onclick=\"logout()\"]");
 
-  if (dailyTaskBtn) {
-    dailyTaskBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      loadDailyTasks();
-    });
-  }
-
-  if (addUserBtn) {
-    addUserBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      loadAddUserForm();
-    });
-  }
-
-  if (userManagerBtn) {
-    userManagerBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      loadUserManager();
-    });
-  }
+  if (btnDaily) btnDaily.addEventListener("click", loadDailyTasks);
+  if (btnAddUser) btnAddUser.addEventListener("click", loadAddUserForm);
+  if (btnMember) btnMember.addEventListener("click", loadMemberManagement);
+  if (btnLogout) btnLogout.addEventListener("click", logout);
 });
