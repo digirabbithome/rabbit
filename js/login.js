@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
-// 你的 Firebase 設定
 const firebaseConfig = {
   apiKey: "AIzaSyANuDJyJuQbxnXq-FTyaTAI9mSc6zpmuWs",
   authDomain: "rabbithome-auth.firebaseapp.com",
@@ -23,8 +22,8 @@ form.addEventListener('submit', async (e) => {
   const password = form.password.value;
 
   try {
-    const result = await signInWithEmailAndPassword(auth, email, password);
-    localStorage.setItem('nickname', '小兔');  // 之後可改為動態設定
+    await signInWithEmailAndPassword(auth, email, password);
+    localStorage.setItem('nickname', '小兔');
     window.location.href = "index.html";
   } catch (err) {
     status.textContent = "登入失敗：" + err.message;
