@@ -1,14 +1,17 @@
-
+import { loadDailyTasks } from './dailyTasks.js';
 import { loadAddUserForm } from './addUser.js';
 import { loadMemberManagement } from './memberManagement.js';
-import { loadDailyTasks } from './dailyTasks.js';
-import { logout } from './auth.js';
+import { logout } from './firebase.js';
 
-window.addEventListener('DOMContentLoaded', () => {
-  function safeBind(id, handler) {
-    const btn = document.getElementById(id);
-    if (btn) btn.addEventListener("click", handler);
-  }
+window.addEventListener("DOMContentLoaded", () => {
+  const safeBind = (id, handler) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("click", handler);
+    } else {
+      console.warn(`元素 #${id} 不存在，無法綁定`);
+    }
+  };
 
   safeBind("dailyTasksBtn", loadDailyTasks);
   safeBind("addUserBtn", loadAddUserForm);
