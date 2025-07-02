@@ -1,1 +1,1 @@
-/* 工具列樣式 */
+.sidebar { position: fixed; top: 0; left: 0; width: 200px; background: #ffe3ed; height: 100vh; padding: 20px; box-shadow: 2px 0 5px rgba(0,0,0,0.1); } .sidebar button { display: block; margin: 10px 0; width: 100%; padding: 10px; border: none; background: #ff9ac2; color: white; border-radius: 8px; cursor: pointer; } .sidebar button:hover { background: #ff75af; }
