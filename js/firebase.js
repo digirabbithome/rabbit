@@ -1,16 +1,15 @@
-// 這是 firebase.js 範本，請替換為你自己的 Firebase 設定
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { showDashboard } from './dashboard.js';
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_BUCKET",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyANuDJyJuQbxnXq-FTyaTAI9mSc6zpmuWs",
+  authDomain: "rabbithome-auth.firebaseapp.com",
+  projectId: "rabbithome-auth",
+  storageBucket: "rabbithome-auth.firebasestorage.app",
+  messagingSenderId: "50928677930",
+  appId: "1:50928677930:web:e8eff13c8028b888537f53"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -19,7 +18,7 @@ export const auth = getAuth(app);
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    localStorage.setItem('nickname', '小兔'); // 這裡設定預設暱稱
+    localStorage.setItem('nickname', '小兔');
     showDashboard(user);
   }
 });

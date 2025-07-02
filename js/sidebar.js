@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (dailyTaskBtn) {
     dailyTaskBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      loadDailyTasks(); // 這個函式在 dailyTasks.js 中定義
+      loadDailyTasks();
     });
   }
 });

@@ -1,5 +1,5 @@
 import { db } from './firebase.js';
-import { getDoc, setDoc, doc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 export async function loadDailyTasks() {
   const main = document.getElementById('main-content');
