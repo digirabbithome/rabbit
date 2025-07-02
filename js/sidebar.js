@@ -1,3 +1,5 @@
+import { loadAddUserForm } from './addUser.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   const dailyTaskBtn = document.getElementById('menu-daily');
   const addUserBtn = document.getElementById('menu-adduser');
