@@ -9,7 +9,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    window.location.href = "dashboard.html";  // ✅ 登入成功後導向主畫面
+    window.location.href = "dashboard.html";  // 登入成功後導向主頁
   } catch (error) {
     document.getElementById("loginResult").innerText = "❌ 登入失敗：" + error.message;
   }
