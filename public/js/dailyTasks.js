@@ -1,1 +1,1 @@
-// 每日任務功能
+export function loadDailyTasks() { document.getElementById('mainContent').innerHTML = '<h2>🗓️ 每日工作</h2>'; }

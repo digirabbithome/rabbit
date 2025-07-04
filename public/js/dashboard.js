@@ -1,1 +1,2 @@
-// 主畫面載入控制
+import './sidebar.js';
+import './sidebar.js';
