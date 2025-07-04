@@ -1,5 +1,3 @@
 {
-  "build": {
-    "outputDirectory": "public"
-  }
+  "public": "public"
 }
