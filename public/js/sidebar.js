@@ -1,4 +1,3 @@
-
 import { loadAddUserForm } from './addUser.js';
 import { loadMemberManagement } from './memberManagement.js';
 import { loadDailyTasks } from './dailyTasks.js';
@@ -10,8 +9,8 @@ window.addEventListener('DOMContentLoaded', () => {
     if (btn) btn.addEventListener("click", handler);
   }
 
-  safeBind("dailyTasksBtn", loadDailyTasks);
+  safeBind("dailyTaskBtn", loadDailyTasks);
   safeBind("addUserBtn", loadAddUserForm);
-  safeBind("memberMgmtBtn", loadMemberManagement);
+  safeBind("memberBtn", loadMemberManagement);
   safeBind("logoutBtn", logout);
 });
